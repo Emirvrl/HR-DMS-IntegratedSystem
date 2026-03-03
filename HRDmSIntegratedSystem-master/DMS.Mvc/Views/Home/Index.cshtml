@@ -1,0 +1,224 @@
+﻿@model DMS.Mvc.Models.DashboardViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - HR & DMS System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .card-box {
+            border-radius: 10px;
+            border: none;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+            .card-box:hover {
+                transform: translateY(-5px);
+            }
+
+        .bg-gradient-primary {
+            background: linear-gradient(45deg, #4e73df, #224abe);
+        }
+
+        .bg-gradient-success {
+            background: linear-gradient(45deg, #1cc88a, #13855c);
+        }
+
+        .bg-gradient-warning {
+            background: linear-gradient(45deg, #f6c23e, #dda20a);
+        }
+
+        .icon-lg {
+            font-size: 2.5rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">DMS SYSTEM</a>
+
+            <div class="d-flex align-items-center">
+
+                @if (Context.Session.GetString("IsAdmin") == "true")
+                {
+                    <div class="dropdown me-3">
+                        <button class="btn btn-outline-warning dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-shield-lock"></i> Admin Panel
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/Admin/Categories">Categories</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/Admin/SystemLogs">System Logs</a></li>
+                        </ul>
+                    </div>
+                }
+
+                <span class="text-white me-3">
+                    <i class="bi bi-person-circle"></i> @Context.Session.GetString("Username")
+                </span>
+                <a href="/Account/Logout" class="btn btn-sm btn-outline-light">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h2 class="fw-light">Overview</h2>
+                <p class="text-muted">System statistics and quick access panel.</p>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card card-box bg-gradient-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col me-2">
+                                <div class="text-xs fw-bold text-uppercase mb-1 text-white-50">Personnel Status</div>
+
+                                <div class="h5 mb-0 fw-bold text-white">
+                                    Total: @Model.TotalEmployeeCount
+                                </div>
+                                <div class="h6 mb-0 text-white-50">
+                                    My Dept: @Model.DepartmentEmployeeCount
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="bi bi-people-fill icon-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/Document/WaitingApprovals" class="text-decoration-none">
+                    <div class="card card-box bg-gradient-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center text-white">
+                                <div class="col me-2">
+                                    <div class="text-xs fw-bold text-uppercase mb-1">Pending Approvals</div>
+                                    <div class="h3 mb-0 fw-bold">@Model.PendingApprovalCount</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="bi bi-hourglass-split icon-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-box bg-gradient-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col me-2">
+                                <div class="text-xs fw-bold text-uppercase mb-1">My Uploads</div>
+                                <div class="h3 mb-0 fw-bold">@Model.MyDocumentCount</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="bi bi-folder-check icon-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-4 mb-4">
+                <div class="card shadow">
+                    <div class="card-header bg-white py-3">
+                        <h6 class="m-0 fw-bold text-primary">Quick Actions</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-3">
+                            <a href="/Document/Create" class="btn btn-primary">
+                                <i class="bi bi-upload"></i> Upload New Document
+                            </a>
+                            <a href="/Document/Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-list-ul"></i> View All Documents
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 mb-4">
+                <div class="card shadow">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 fw-bold text-primary">Recently Added</h6>
+                        <a href="/Document/Index" class="small text-decoration-none">View All &rarr;</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Uploader</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.RecentDocuments)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="/Document/Details/@item.DocumentID" class="text-dark text-decoration-none fw-bold">
+                                                    @item.Title
+                                                </a>
+                                            </td>
+                                            <td>@item.OwnerName</td>
+                                            <td>@item.CreatedDate.ToString("yyyy-MM-dd")</td>
+                                            <td>
+                                                @if (item.Status == "Approved")
+                                                {
+                                                    <span class="badge bg-success">Approved</span>
+                                                }
+                                                else if (item.Status == "Pending")
+                                                {
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">@item.Status</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
